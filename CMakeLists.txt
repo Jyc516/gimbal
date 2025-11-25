@@ -44,8 +44,6 @@ add_executable(${CMAKE_PROJECT_NAME}
         UserCode/Inc/imu.h
         UserCode/Src/bmi088.cpp
         UserCode/Src/imu.cpp
-        UserCode/Src/gimbal.cpp
-        UserCode/Inc/gimbal.h
         UserCode/Inc/PID.h
         UserCode/Inc/motor.h
         UserCode/Src/PID.cpp
