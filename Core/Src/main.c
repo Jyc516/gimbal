@@ -23,7 +23,6 @@
 #include "dma.h"
 #include "iwdg.h"
 #include "spi.h"
-#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -51,7 +50,29 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+// 有关CAN通信
+CAN_RxHeaderTypeDef rx_header;
+CAN_TxHeaderTypeDef tx_header = {
+    .StdId = 0x1FE,
+    .ExtId = 0,
+    .IDE = CAN_ID_STD,
+    .RTR = CAN_RTR_DATA,
+    .DLC = 8,
+    .TransmitGlobalTime = DISABLE
+  };
+CAN_FilterTypeDef filter_config = {
+    .FilterIdHigh = 0x0000,
+    .FilterIdLow = 0x0000,
+    .FilterMaskIdHigh = 0x0000,
+    .FilterMaskIdLow = 0x0000,
+    .FilterFIFOAssignment = CAN_FilterFIFO0,
+    .FilterBank = 0,
+    .FilterMode = CAN_FILTERMODE_IDMASK,
+    .FilterScale = CAN_FILTERSCALE_32BIT,
+    .FilterActivation = ENABLE
+  };
 
+uint32_t can_tx_mailbox;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -99,12 +120,14 @@ int main(void)
   MX_CAN1_Init();
   MX_IWDG_Init();
   MX_SPI1_Init();
-  MX_TIM6_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
   rc_init();
   bmi088_init();
-  HAL_TIM_Base_Start_IT(&htim6);
+
+  HAL_CAN_ConfigFilter(&hcan1, &filter_config);
+  HAL_CAN_Start(&hcan1);
+  HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING);
   /* USER CODE END 2 */
 
   /* Init scheduler */

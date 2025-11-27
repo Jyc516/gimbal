@@ -27,9 +27,9 @@ protected:
     float tgt_angle = 0.f, fdb_angle = 0.f;
     float tgt_speed = 0.f, fdb_speed = 0.f;
     float output_intensity = 0.f;       // 扭矩输出接口
-    const float ff_speed = 0.f;         // 前馈，设置目标速度？ff_speed暂时没用，置为常数0，SetAngle有注释化
+    float ff_speed = 0.f;               // 前馈，设置目标速度
     float ff_intensity = 0.f;           // 解算设置前馈力矩
-    const bool ff_intensity_flag;       // false 表示常值前馈
+    const bool const_ff_intensity_flag; // true 表示常值前馈，可以在 set_angle/set_speed 中更改ff_intensity
 
     enum ControlMode {
         TORQUE,                         // 开环力矩控制
@@ -54,12 +54,12 @@ public:
         ppid(ppid_),
         spid(spid_),
         ff_intensity(ff_intensity_),
-        ff_intensity_flag(ff_intensity_ < 0.f){}
+        const_ff_intensity_flag(ff_intensity_ >= 0.f){}
 
     virtual ~Motor() = default;
 
     virtual void read_RxMsg(const uint8_t rx_data[8]) = 0;
-    virtual void write_TxMsg(uint8_t tx_data[8]);
+    virtual void write_TxMsg(uint8_t tx_data[8]) = 0;
 
     void SetIntensity(float intensity);
     void SetSpeed(float tgt_speed_, float ff_intensity_=0.f);

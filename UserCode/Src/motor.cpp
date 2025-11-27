@@ -38,15 +38,19 @@ void Motor::SetSpeed(const float tgt_speed_, const float ff_intensity_){
     mode = SPEED;
 
     tgt_speed = tgt_speed_;
-    ff_intensity = ff_intensity_;
+    if (const_ff_intensity_flag == true) {
+        ff_intensity = ff_intensity_;
+    }
 }
 
-void Motor::SetAngle(const float tgt_angle_, float ff_speed_, const float ff_intensity_){
+void Motor::SetAngle(const float tgt_angle_, const float ff_speed_, const float ff_intensity_){
     mode = POSITION_SPEED;
 
     tgt_angle = tgt_angle_;
-    ff_intensity = ff_intensity_;
-    // ff_speed = ff_speed_;
+    if (const_ff_intensity_flag == true) {
+        ff_intensity = ff_intensity_;
+    }
+    ff_speed = ff_speed_;
 }
 
 
@@ -76,7 +80,7 @@ void GM6020Motor::write_TxMsg(uint8_t tx_data[8]) {
 }
 
 void GM6020Motor::calculate_ff_intensity() {
-    if (ff_intensity_flag) {
+    if (const_ff_intensity_flag == false) {
         const float rad_angle = linear_mapping(fdb_angle, 180.f, 3.1415926f);   // deg -> rad
         const float torque = 0.5 * 9.8 * sin(rad_angle) * 0.05;
         const float ff_current = torque / torque_current_ratio;
@@ -140,4 +144,4 @@ GM6020Motor pitch_motor(1, 4, pitch_ppid, pitch_spid);
 
 PID yaw_ppid(0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f);
 PID yaw_spid(0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f);
-GM6020Motor yaw_motor(1, 4, yaw_ppid, yaw_spid);
+GM6020Motor yaw_motor(1, 1, yaw_ppid, yaw_spid);

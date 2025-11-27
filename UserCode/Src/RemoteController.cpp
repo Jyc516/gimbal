@@ -14,15 +14,19 @@ void RC::handle(const int ticks){
 
     int ch_tmp = (rx_data[0] | rx_data[1] << 8) & 0x07FF;
     CH0 = linear_mapping(ch_tmp, ch_low, ch_high, -1.0f, 1.0f);
+    set_dead(CH0);
 
     ch_tmp = (rx_data[1] >> 3 | rx_data[2] << 5) & 0x07FF;
     CH1 = linear_mapping(ch_tmp, ch_low, ch_high, -1.0f, 1.0f);
+    set_dead(CH1);
 
     ch_tmp = (rx_data[2] >> 6 | rx_data[3] << 2 | rx_data[4] << 10) & 0x07FF;
     CH2 = linear_mapping(ch_tmp, ch_low, ch_high, -1.0f, 1.0f);
+    set_dead(CH2);
 
     ch_tmp = (rx_data[4] >> 1 | rx_data[5] << 7) & 0x07FF;
     CH3 = linear_mapping(ch_tmp, ch_low, ch_high, -1.0f, 1.0f);
+    set_dead(CH3);
 
     S1 = static_cast<SwitchState>((rx_data[5] >> 4) & 0x03);
     S2 = static_cast<SwitchState>((rx_data[5] >> 6) & 0x03);
