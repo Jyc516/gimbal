@@ -6,6 +6,7 @@
 #include "cmsis_os2.h"
 #include "can.h"
 #include "motor.h"
+#include "imu.h"
 
 int stop_flag = 1; // 置1停止
 extern GM6020Motor yaw_motor;   // id 1
@@ -13,6 +14,8 @@ extern GM6020Motor pitch_motor; // id 4
 extern CAN_TxHeaderTypeDef tx_header;
 extern uint32_t can_tx_mailbox;
 uint8_t tx_data[8] = {0};
+
+extern IMU imu;
 
 osThreadId_t yaw_task_handle;
 osThreadAttr_t yaw_task_attr{
@@ -90,8 +93,26 @@ osThreadAttr_t motor_task_attr{
     }
 }
 
+
+osThreadId_t imu_task_handle;
+osThreadAttr_t imu_task_attr{
+    .name = "imu_task_attr",
+    .stack_size = 256 * 4,
+    .priority = osPriorityNormal,
+};
+
+
+[[noreturn]] void imu_task(void *) {
+    while (true) {
+        imu.accel_calculate();
+        imu.gyro_calculate();
+        osDelay(1);
+    }
+}
+
 void user_task_init() {
     // yaw_task_handle = osThreadNew(yaw_task, nullptr, &yaw_task_attr);
     // pitch_task_handle = osThreadNew(pitch_task, nullptr, &pitch_task_attr);
     motor_task_handle = osThreadNew(motor_task, nullptr, &motor_task_attr);
+    imu_task_handle = osThreadNew(imu_task, nullptr, &imu_task_attr);
 }
