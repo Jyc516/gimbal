@@ -33,4 +33,7 @@ gimbal/callback.o: ..\UserCode\Src\Callback.cpp ..\Core\Inc\can.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
-  ..\UserCode\Inc\motor.h ..\UserCode\Inc\PID.h
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
+  ..\UserCode\Inc\motor.h ..\UserCode\Inc\PID.h \
+  ..\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS_V2\cmsis_os2.h \
+  ..\Core\Inc\usart.h ..\UserCode\Inc\RemoteController.h

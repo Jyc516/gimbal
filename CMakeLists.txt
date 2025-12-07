@@ -43,7 +43,11 @@ add_executable(${CMAKE_PROJECT_NAME}
         UserCode/Src/bmi088.cpp
         UserCode/Src/imu.cpp
         UserCode/Inc/bmi088.h
-        UserCode/Inc/imu.h)
+        UserCode/Inc/imu.h
+        UserCode/Src/RemoteController.cpp
+        UserCode/Inc/RemoteController.h
+        UserCode/Src/init.cpp
+        UserCode/Inc/init.h)
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)

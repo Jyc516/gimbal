@@ -35,4 +35,6 @@ gimbal/user_task.o: ..\UserCode\Src\user_task.cpp \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
-  ..\UserCode\Inc\motor.h ..\UserCode\Inc\PID.h ..\UserCode\Inc\imu.h
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
+  ..\UserCode\Inc\motor.h ..\UserCode\Inc\PID.h ..\UserCode\Inc\imu.h \
+  ..\UserCode\Inc\RemoteController.h
