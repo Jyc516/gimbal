@@ -12,6 +12,8 @@
 
 #include "RemoteController.h"
 
+#include "iwdg.h"
+
 
 int stop_flag = 1; // 置1停止
 extern GM6020Motor yaw_motor;   // id 1
@@ -147,6 +149,21 @@ osThreadAttr_t rc_task_attr{
 }
 
 
+osThreadId_t ctrl_task_handle;
+osThreadAttr_t ctrl_task_attr{
+    .name = "ctrl_task",
+    .stack_size = 256 * 4,
+    .priority = osPriorityNormal,
+};
+
+[[noreturn]] void ctrl_task(void *) {
+    while (true) {
+        HAL_IWDG_Refresh(&hiwdg);
+        osDelay(1000);
+    }
+}
+
+
 void user_task_init() {
     // 测试用线程
     // yaw_task_handle = osThreadNew(yaw_task, nullptr, &yaw_task_attr);
@@ -155,6 +172,7 @@ void user_task_init() {
     motor_task_handle = osThreadNew(motor_task, nullptr, &motor_task_attr);
     imu_task_handle = osThreadNew(imu_task, nullptr, &imu_task_attr);
     rc_task_handle = osThreadNew(rc_task, nullptr, &rc_task_attr);
+        ctrl_task_handle = osThreadNew(ctrl_task, nullptr, &ctrl_task_attr);
 
     rc_semaphore_handle = osSemaphoreNew(1, 0, &rc_semaphore_attr);
 }
